@@ -13,7 +13,7 @@
 
 ## Structure
 #### MySQL Database - 23.07.07
-![스크린샷 2023-07-08 오전 9.31.45.png](%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202023-07-08%20%EC%98%A4%EC%A0%84%209.31.45.png)
+<img width="936" alt="스크린샷 2023-07-08 오전 9 31 45" src="https://github.com/IamScout/airflow-cordinator-/assets/130134750/ffd30525-2fb5-4914-8bae-7e9181334435">
 
 #### Airflow
 ```
