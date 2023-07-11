@@ -1,0 +1,56 @@
+id,league_name,league_id,league_nation
+1,Premier League,39,England
+2,Championship,40,England
+3,Ligue 1,61,France
+4,Ligue 2,62,France
+5,Serie A,71,Brazil
+6,Bundesliga,78,Germany
+7,2. Bundesliga,79,Germany
+8,Eerste Divisie,89,Netherlands
+9,Primeira Liga,94,Portugal
+10,J1 League,98,Japan
+11,Eliteserien,103,Norway
+12,Premier League,110,Wales
+13,Allsvenskan,113,Sweden
+14,Superliga,119,Denmark
+15,Liga Profesional Argentina,128,Argentina
+16,Serie A,135,Italy
+17,Serie B,136,Italy
+18,La Liga,140,Spain
+19,Segunda División,141,Spain
+20,Jupiler Pro League,144,Belgium
+21,Úrvalsdeild,164,Iceland
+22,Super League,169,China
+23,Championship,180,Scotland
+24,A-League,188,Australia
+25,Super League 1,197,Greece
+26,Süper Lig,203,Turkey
+27,Super League,207,Switzerland
+28,HNL,210,Croatia
+29,Bundesliga,218,Austria
+30,Premier League,235,Russia
+31,Primera A,239,Colombia
+32,Liga Pro,242,Ecuador
+33,Veikkausliiga,244,Finland
+34,Division Profesional - Clausura,252,Paraguay
+35,Major League Soccer,253,USA
+36,National Division,261,Luxembourg
+37,Liga MX,262,Mexico
+38,Primera División,265,Chile
+39,Primera División - Apertura,268,Uruguay
+40,Primera División - Clausura,270,Uruguay
+41,Persian Gulf Pro League,290,Iran
+42,K League 1,292,South-Korea
+43,Thai League 1,296,Thailand
+44,Pro League,301,United-Arab-Emirates
+45,Stars League,305,Qatar
+46,Pro League,307,Saudi-Arabia
+47,Meistriliiga,329,Estonia
+48,Primera División,344,Bolivia
+49,First League,355,Montenegro
+50,Premier Division,357,Ireland
+51,A Lyga,362,Lithuania
+52,Virsliga,365,Latvia
+53,Super League,369,Uzbekistan
+54,First League,371,Macedonia
+55,Premiership,408,Northern-Ireland
