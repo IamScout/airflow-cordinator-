@@ -1,7 +1,7 @@
 # MODULE IMPORT
 import sys
 from datetime import datetime, timedelta
-sys.path.append('/Users/kimdohoon/git/football-data-pipeline/lib')
+sys.path.append('/Users/kimdohoon/git/airflow-cordinator-/lib/football_lib.py')
 import football_lib as lib
 
 # READ *

@@ -1,7 +1,7 @@
 # MODULE IMPORT
 import sys, os, json
 from datetime import datetime, timedelta
-sys.path.append('/Users/kimdohoon/git/football-data-pipeline/lib')
+sys.path.append('/Users/kimdohoon/git/airflow-cordinator-/lib/football_lib.py')
 import football_lib as lib
 
 # DATE parameter needs FORM : YYYY-mm-dd

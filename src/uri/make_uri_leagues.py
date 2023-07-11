@@ -1,6 +1,6 @@
 # MODULE IMPORT
 import sys
-sys.path.append('/Users/kimdohoon/git/football-data-pipeline/lib')
+sys.path.append('/Users/kimdohoon/git/airflow-cordinator-/lib/football_lib.py')
 import football_lib as lib
 
 # READ LEAGUE ID

@@ -1,7 +1,7 @@
 # MODULE IMPORT
 import sys, csv
 from datetime import datetime, timedelta
-sys.path.append('/Users/kimdohoon/git/football-data-pipeline/lib')
+sys.path.append('/Users/kimdohoon/git/airflow-cordinator-/lib')
 import football_lib as lib
 
 PATH = '/Users/kimdohoon/git/airflow-cordinator-/src/database/pipe_league.csv'
@@ -12,7 +12,7 @@ with open(PATH, 'r') as file:
     for row in csv_reader:
         datas.append(row)
 
-cursor = lib.MySQL_Connection()
+QUERY = []
 for data in datas:
     id = data[0]
     api_league_id = data[2]
@@ -21,4 +21,6 @@ for data in datas:
     QUERY_EACH = f"INSERT INTO pipe_league (id, api_league_id, league_name, league_nation) \
             VALUES ({id}, {api_league_id}, '{league_name}', '{league_nation}')"
     print(QUERY_EACH)
-    cursor.execute(QUERY_EACH)
+    QUERY.append(QUERY_EACH)
+
+lib.MySQL_Update(QUERY)
