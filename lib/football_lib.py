@@ -12,10 +12,18 @@ def MySQL_Connection():
     conn = mc.connect(user=datas[1], \
                       password=datas[2], \
 	                  host=datas[0], \
-	                  database = 'scout', \
+	                  database = 'pipeline_scout', \
 	                  port = '3306')
     print("Hi! SQL")
     return conn
+
+def MySQL_Update(QUERY:list):
+    conn = MySQL_Connection()
+    cursor = conn.cursor()
+    for que in QUERY:
+        cursor.execute(que)
+        conn.commit()
+        print(f"update finished : {que}")
 
 def read_Params(keyword, table, external: dict = None):
     conn = MySQL_Connection()
@@ -37,11 +45,6 @@ def make_uri(keyword, params: dict):
         base += key + "=" + str(value) + "&"
         uri = base.rstrip("&")
     return uri
-
-def db_update(uri):
-    pass
-
-
 
 def make_json_local(uri_list, DIRECTORY, api_keys):
     headers = {
@@ -105,7 +108,8 @@ if __name__ == "__main__":
     #     print(test_dict)
     #     uri = make_uri("players", test_dict)
     #     print(uri)
-    uri = "https://v3.football.api-sports.io/teams/statistics?league=39&team=33&season=2022&date=2023-03-27"
-    DIRECTORY = "/Users/kimdohoon/desktop"
-    message = make_json(uri, DIRECTORY)
-    print(message)
+    # uri = "https://v3.football.api-sports.io/teams/statistics?league=39&team=33&season=2022&date=2023-03-27"
+    # DIRECTORY = "/Users/kimdohoon/desktop"
+    # message = make_json(uri, DIRECTORY)
+    # print(message)
+    print(datas)
