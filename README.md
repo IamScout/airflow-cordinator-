@@ -5,7 +5,7 @@
  1. 참조용 파라미터가 적재된 MySQL 데이터베이스 갱신
  2. 당일 갱신되는 데이터들을 요청하기 위한 url 일별 생성
  3. 주간 갱신되는 데이터들을 요청하기 위한 url 주별 생성
- 4. 생성된 url을 FAST API 서버로 curl
+ 4. 생성된 url을 수집  API 서버로 요청
  
 ## Tools
  1. Apache Airflow - v2.6.1
@@ -23,6 +23,8 @@
 ## Get Started
 ```
 $ pip install mysql-connector
+$ pip install google-cloud-storage
+$ pip install requests
 ```
 ``` 
 # 로컬 또는 컨테이너 환경에서 airflow를 실행 중일 경우 아래의 명령어로 시작
