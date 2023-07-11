@@ -1,20 +1,17 @@
 import mysql.connector as mc
-import requests, json, subprocess
+import requests, json, csv, subprocess
 
-
-def MySQL_Connection_Old():
-    conn = mc.connect(user='root', \
-                      password= 'tmzkdnxj1', \
-	                  host='34.64.214.96', \
-	                  database = 'scout', \
-	                  port = '3306')
-    print("Hi! SQL")
-    return conn
+# CSV File Located At Local
+PATH = '/Users/kimdohoon/src/google/scout_sql.csv'
+with open(PATH, 'r') as file:
+    csv_reader = csv.reader(file)
+    for row in csv_reader:
+        datas = row
 
 def MySQL_Connection():
-    conn = mc.connect(user='root', \
-                      password= 'tmzkdnxj1', \
-	                  host='34.64.214.96', \
+    conn = mc.connect(user=datas[1], \
+                      password=datas[2], \
+	                  host=datas[0], \
 	                  database = 'scout', \
 	                  port = '3306')
     print("Hi! SQL")
