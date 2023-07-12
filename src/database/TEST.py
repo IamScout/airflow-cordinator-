@@ -1,20 +1,10 @@
-import csv
+import os
+import sys
 
-# data = []
-# PATH = '/Users/kimdohoon/git/airflow-cordinator-/src/database/pipe_league.csv'
-#
-# with open(PATH, 'r') as file:
-#     csv_reader = csv.reader(file)
-#     for row in csv_reader:
-#         data.append(row)
-#
-# print(data)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path = os.path.join(current_dir, '../../lib')
+sys.path.append(relative_path)
 
-PATH = '/Users/kimdohoon/src/google/scout_sql.csv'
+import football_lib as lib
 
-with open(PATH, 'r') as file:
-    csv_reader = csv.reader(file)
-    for row in csv_reader:
-        datas = row
-
-print(datas)
+print("TEST")

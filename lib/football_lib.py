@@ -2,16 +2,22 @@ import mysql.connector as mc
 import requests, json, csv, subprocess
 
 # CSV File Located At Local
-PATH = '/Users/kimdohoon/src/google/scout_sql.csv'
-with open(PATH, 'r') as file:
+PATH_DB = '/Users/kimdohoon/src/google/scout_sql.csv'
+with open(PATH_DB, 'r') as file:
     csv_reader = csv.reader(file)
     for row in csv_reader:
-        datas = row
+        db_data = row
+
+PATH_API = '/Users/kimdohoon/src/API/football.csv'
+with open(PATH_API, 'r') as file:
+    csv_reader = csv.reader(file)
+    for row in csv_reader:
+        api_data = row
 
 def MySQL_Connection():
-    conn = mc.connect(user=datas[1], \
-                      password=datas[2], \
-	                  host=datas[0], \
+    conn = mc.connect(user=db_data[1], \
+                      password=db_data[2], \
+	                  host=db_data[0], \
 	                  database = 'pipeline_scout', \
 	                  port = '3306')
     print("Hi! SQL")
@@ -46,24 +52,13 @@ def make_uri(keyword, params: dict):
         uri = base.rstrip("&")
     return uri
 
-def make_json_local(uri_list, DIRECTORY, api_keys):
+def API_get_infos(uri):
     headers = {
         'x-rapidapi-host': "v3.football.api-sports.io",
-        'x-rapidapi-key': api_keys
+        'x-rapidapi-key': api_data[0]
     }
-    for values in uri_list:
-        uri = values["uri"]
-        filename = values["filename"]
-        # GET RESPONSE
-        response = requests.request("GET", uri, headers=headers).json()
-        # FILE WRITE
-        with open(f"{DIRECTORY}/{filename}", "w") as file:
-            json.dump(response, file, indent=4)
-            print(filename + " load is done")
-
-
-# https://v3.football.api-sports.io/teams/statistics?league=39&team=33&season=2022&date=2023-03-27
-
+    response = requests.request("GET", uri, headers=headers).json()
+    return response
 
 def make_json(uri, DIRECTORY):
     start_index = uri.find("io/") + 3
@@ -81,7 +76,7 @@ def make_json(uri, DIRECTORY):
             FILENAME += f"-{value}"
     headers = {
         'x-rapidapi-host': "v3.football.api-sports.io",
-        'x-rapidapi-key': "e6b9fb7ce7a7ad7b239595f76e546384"
+        'x-rapidapi-key': api_data[0]
     }
     # GET RESPONSE
     response = requests.request("GET", uri, headers=headers).json()
@@ -91,7 +86,7 @@ def make_json(uri, DIRECTORY):
     return(FILENAME + " load is done")
 
 def send_curl(uri, endpoint):
-    command = f"curl 35.216.48.93:3333/{endpoint}/url={uri}"
+    command = f"curl 34.64.186.182:3333/{endpoint}/url={uri}"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
     if error:
@@ -101,6 +96,7 @@ def send_curl(uri, endpoint):
 
 # TEST - players with 1 team id
 if __name__ == "__main__":
+    pass
     # params = read_Params("api_league_id", "pipe_league")
     # params_2 = read_Params("*", "pipe_team", {"api_league_id": params[0][0]})
     # for cnt in range(5):
@@ -112,4 +108,3 @@ if __name__ == "__main__":
     # DIRECTORY = "/Users/kimdohoon/desktop"
     # message = make_json(uri, DIRECTORY)
     # print(message)
-    print(datas)

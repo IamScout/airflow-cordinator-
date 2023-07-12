@@ -1,7 +1,8 @@
 # MODULE IMPORT
-import sys, csv
-from datetime import datetime, timedelta
-sys.path.append('/Users/kimdohoon/git/airflow-cordinator-/lib')
+import sys, os, csv
+current_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path = os.path.join(current_dir, '../../lib')
+sys.path.append(relative_path)
 import football_lib as lib
 
 PATH = '/Users/kimdohoon/git/airflow-cordinator-/src/database/pipe_league.csv'

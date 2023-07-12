@@ -1,7 +1,8 @@
 # MODULE IMPORT
-import sys
-from datetime import datetime, timedelta
-sys.path.append('/Users/kimdohoon/git/airflow-cordinator-/lib/football_lib.py')
+import sys, os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path = os.path.join(current_dir, '../../lib')
+sys.path.append(relative_path)
 import football_lib as lib
 
 # READ LEAGUE ID
