@@ -1,17 +1,15 @@
 # MODULE IMPORT
 from datetime import datetime, timedelta
-import sys, os
-current_dir = os.path.dirname(os.path.abspath(__file__))
-relative_path = os.path.join(current_dir, '../../lib')
-sys.path.append(relative_path)
+import sys
+sys.path.append('../../lib')
 import football_lib as lib
 
 # DATE parameter needs FORM : YYYY-mm-dd
-date = (datetime.now() - timedelta(days=80)).strftime("%Y-%m-%d")
+date = (datetime.now() - timedelta(days=150)).strftime("%Y-%m-%d")
 # date = {{ds}}
 
 # READ FIXTURE ID
-params_before = lib.read_Params("api_fixture_id", "pipe_round", {"date" : date})
+params_before = lib.read_Params("api_fixture_id", "pipe_round", {"date" : f'"{date}"'})
 
 uri_list = []
 for count in range(len(params_before)):

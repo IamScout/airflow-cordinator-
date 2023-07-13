@@ -1,8 +1,6 @@
 # MODULE IMPORT
-import sys, os
-current_dir = os.path.dirname(os.path.abspath(__file__))
-relative_path = os.path.join(current_dir, '../../lib')
-sys.path.append(relative_path)
+import sys
+sys.path.append('../../lib')
 import football_lib as lib
 
 # READ TEAM ID

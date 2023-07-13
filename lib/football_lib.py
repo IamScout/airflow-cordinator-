@@ -86,7 +86,7 @@ def make_json(uri, DIRECTORY):
     return(FILENAME + " load is done")
 
 def send_curl(uri, endpoint):
-    command = f"curl 34.64.354.93:3333/{endpoint}/url={uri}"
+    command = f"curl 34.64.254.93:3000/{endpoint}/url={uri}"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
     if error:
@@ -96,14 +96,5 @@ def send_curl(uri, endpoint):
 # TEST - players with 1 team id
 if __name__ == "__main__":
     pass
-    # params = read_Params("api_league_id", "pipe_league")
-    # params_2 = read_Params("*", "pipe_team", {"api_league_id": params[0][0]})
-    # for cnt in range(5):
-    #     test_dict = {"league": params_2[0][3], "team": params_2[0][2], "season": "2023", "page": cnt}
-    #     print(test_dict)
-    #     uri = make_uri("players", test_dict)
-    #     print(uri)
-    # uri = "https://v3.football.api-sports.io/teams/statistics?league=39&team=33&season=2022&date=2023-03-27"
-    # DIRECTORY = "/Users/kimdohoon/desktop"
-    # message = make_json(uri, DIRECTORY)
-    # print(message)
+
+    # curl 34.64.254.93:3000/fixtures/url="

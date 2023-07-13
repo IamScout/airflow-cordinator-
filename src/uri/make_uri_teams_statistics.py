@@ -1,10 +1,9 @@
 # MODULE IMPORT
 from datetime import datetime, timedelta
-import sys, os
-current_dir = os.path.dirname(os.path.abspath(__file__))
-relative_path = os.path.join(current_dir, '../../lib')
-sys.path.append(relative_path)
+import sys
+sys.path.append('../../lib')
 import football_lib as lib
+
 # DATE parameter needs FORM : YYYY-mm-dd
 date = (datetime.now() - timedelta(days=100)).strftime("%Y-%m-%d")
 # date = {{ds}}
@@ -19,7 +18,7 @@ for count in range(len(params_before)):
         "league" : params_before[count][3],
         "team" : params_before[count][2],
         "season" : 2022,
-        "date" : date
+        "date" :  date
     }
     # MAKE URI
     uri = lib.make_uri("teams/statistics", params)
