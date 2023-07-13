@@ -93,7 +93,6 @@ def send_curl(uri, endpoint):
         print("ERROR appeared while sending CURL:")
         print(error.decode("utf-8"))
 
-
 # TEST - players with 1 team id
 if __name__ == "__main__":
     pass

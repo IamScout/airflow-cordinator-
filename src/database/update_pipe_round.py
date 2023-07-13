@@ -1,8 +1,9 @@
 # MODULE IMPORT
 import sys, os
-current_dir = os.path.dirname(os.path.abspath(__file__))
-relative_path = os.path.join(current_dir, '../../lib')
-sys.path.append(relative_path)
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# relative_path = os.path.join(current_dir, '../../lib')
+# sys.path.append(relative_path)
+sys.path.append("../../lib")
 import football_lib as lib
 
 # GET LEAGUE_ID [(39,), ..]
@@ -12,7 +13,7 @@ print(league_id)
 QUERY = []
 for league in league_id:
     api_league_id = league[0]
-    uri = f"https://v3.football.api-sports.io/fixtures?season=2023&league={api_league_id}"
+    uri = f"https://v3.football.api-sports.io/fixtures?season=2022&league={api_league_id}"
     response = lib.API_get_infos(uri)['response']
 
     # NEED api_fixture_id, home_team_id, away_team_id, date, start_time
