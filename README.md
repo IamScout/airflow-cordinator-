@@ -12,6 +12,9 @@
  2. Google Cloud Service : MySQL 
 
 ## Structure
+#### Pipeline Structure
+<img width="789" alt="스크린샷 2023-07-13 오후 8 35 58" src="https://github.com/IamScout/airflow-cordinator-/assets/130134750/c71e794b-d26e-4bc8-993c-09a043d41a96">
+
 #### MySQL Database - 23.07.07
 <img width="936" alt="스크린샷 2023-07-08 오전 9 31 45" src="https://github.com/IamScout/airflow-cordinator-/assets/130134750/ffd30525-2fb5-4914-8bae-7e9181334435">
 
