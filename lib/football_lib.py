@@ -86,7 +86,7 @@ def make_json(uri, DIRECTORY):
     return(FILENAME + " load is done")
 
 def send_curl(uri, endpoint):
-    command = f"curl 34.64.186.182:3333/{endpoint}/url={uri}"
+    command = f"curl 34.64.354.93:3333/{endpoint}/url={uri}"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
     if error:
