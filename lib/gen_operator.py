@@ -1,3 +1,7 @@
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+from airflow.operators.python_operator import PythonOperator
+
 
 def gen_noti(name: str, stats: str, role:str):
 	#line noti 생성기
@@ -37,4 +41,14 @@ def gen_bash_curl(name: str, url : str, role:str):
   	)
 
 	return bash_task
+
+def gen_python_func(name:str, func_name: str, role:str):
+
+	python_task = PythonOperator(
+		task_id = name,
+		python_callable =func_name,
+		trigger_rule = role,
+		dag = dag
+	)
+	return python_task
 
