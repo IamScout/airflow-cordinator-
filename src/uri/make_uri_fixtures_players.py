@@ -17,7 +17,7 @@ for count in range(len(params_before)):
     params = {
         "fixture" : params_before[count][0]
     }
-    uri = lib.make_uri("fixtures/players", params)
+    uri = lib.make_uri(params)
     uri_list.append(uri)
 
 # SEND CURL

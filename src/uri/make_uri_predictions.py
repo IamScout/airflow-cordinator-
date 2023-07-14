@@ -5,8 +5,8 @@ sys.path.append('../../lib')
 import football_lib as lib
 
 # DATE parameter needs FORM : YYYY-mm-dd
-date = (datetime.now() - timedelta(days=80)).strftime("%Y-%m-%d")
-# date = {{ds}}
+# date = (datetime.now() - timedelta(days=80)).strftime("%Y-%m-%d")
+date = sys.argv[1]
 
 # READ FIXTURE ID
 params_before = lib.read_Params("api_fixture_id", "pipe_round", {"date" :  f"'{date}'"})
@@ -17,7 +17,7 @@ for count in range(len(params_before)):
     params = {
         "fixture" : params_before[count][0]
     }
-    uri = lib.make_uri("predictions", params)
+    uri = lib.make_uri(params)
     uri_list.append(uri)
 
 # SEND CURL

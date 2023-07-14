@@ -14,7 +14,7 @@ for count in range(len(params_before)):
         "season" : 2023
     }
     # MAKE URI
-    uri = lib.make_uri("standings", params)
+    uri = lib.make_uri(params)
     uri_list.append(uri)
 
 # SEND CURL

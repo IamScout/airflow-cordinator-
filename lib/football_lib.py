@@ -45,8 +45,15 @@ def read_Params(keyword, table, external: dict = None):
     fetched = cursor.fetchall()
     return fetched
 
-def make_uri(keyword, params: dict):
+def make_uri_past(keyword, params: dict):
     base = f"https://v3.football.api-sports.io/{keyword}?"
+    for key, value in params.items():
+        base += key + "=" + str(value) + "&"
+        uri = base.rstrip("&")
+    return uri
+
+def make_uri(params: dict):
+    base = ""
     for key, value in params.items():
         base += key + "=" + str(value) + "&"
         uri = base.rstrip("&")
@@ -74,6 +81,7 @@ def make_json(uri, DIRECTORY):
         key, value = param.split("=")
         if key != "season":
             FILENAME += f"-{value}"
+
     headers = {
         'x-rapidapi-host': "v3.football.api-sports.io",
         'x-rapidapi-key': api_data[0]
@@ -81,7 +89,7 @@ def make_json(uri, DIRECTORY):
     # GET RESPONSE
     response = requests.request("GET", uri, headers=headers).json()
     # FILE WRITE
-    with open(f"{DIRECTORY}/{FILENAME}", "w") as file:
+    with open(f"{DIRECTORY}/{FILENAME}.json", "w") as file:
         json.dump(response, file, indent=4)
     return(FILENAME + " load is done")
 
@@ -95,6 +103,6 @@ def send_curl(uri, endpoint):
 
 # TEST - players with 1 team id
 if __name__ == "__main__":
-    pass
-
-    # curl 34.64.254.93:3000/fixtures/url="
+    url = "https://v3.football.api-sports.io/teams/statistics?league=39&team=33&season=2022&date=2023-03-26"
+    DIR = "/Users/kimdohoon/Desktop/"
+    make_json(url, DIR)

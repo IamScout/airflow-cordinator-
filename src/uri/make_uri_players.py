@@ -13,15 +13,15 @@ for values in params_before:
 
     for count in range(len(params_origin)):
         for page in range(5):
-            league_id = params_origin[count][3]
+            league_id = params_origin[count][1]
             team_id = params_origin[count][2]
             # PARAMS : league, team, season, page
             params = {"league" : league_id,
                       "team" : team_id,
                       "season" : 2023,
-                      "page" : page}
+                      "page" : page + 1}
             # MAKE URI
-            uri = lib.make_uri("players", params)
+            uri = lib.make_uri(params)
             uri_list.append(uri)
 
 # SEND CURL

@@ -5,17 +5,19 @@ import football_lib as lib
 
 # READ *
 params_before = lib.read_Params("*", "pipe_round")
+print(params_before)
 
 uri_list = []
 for count in range(len(params_before)):
     # PARAMS : h2h, date, timezone
     params = {
-        "h2h" : f"{params_before[count][3]}-{params_before[count][4]}",
-        "date" : params_before[count][2][:params_before[count][2].index('T')],
+        "h2h" : f"{params_before[count][2]}-{params_before[count][3]}",
+        "date" : params_before[count][4],
         "timezone" : "Europe/London"
     }
     # MAKE URI
-    uri = lib.make_uri("fixtures/headtohead", params)
+    # uri = lib.make_uri("fixtures/headtohead", params)
+    uri = lib.make_uri(params)
     uri_list.append(uri)
 
 # SEND CURL

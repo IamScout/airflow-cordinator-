@@ -11,7 +11,7 @@ for count in range(len(params_before)):
     params = {
         "team" : params_before[count][0]
     }
-    uri = lib.make_uri("players/squads", params)
+    uri = lib.make_uri(params)
     uri_list.append(uri)
 
 # SEND CURL
