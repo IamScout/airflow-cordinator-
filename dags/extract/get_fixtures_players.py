@@ -7,12 +7,12 @@ from airflow.operators.empty import EmptyOperator
 import pendulum
 
 # PARAMETERS
-KST = pendulum.timezone("Asia/Seoul")
+# KST = pendulum.timezone("Asia/Seoul")
 execution_date = {{ds}}.strftime("%Y-%m-%d")
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
     'depends_on_past': True,
-    'start_date': datetime(2023,1,1, tzinfo=KST)
+    'start_date': datetime(2023,1,1)#, tzinfo=KST)
 }
 
 # DAG SETTINGS
@@ -32,7 +32,7 @@ start_task = EmptyOperator(
 check_DONE = BashOperator(
 	task_id='check.dir',
 	bash_command='''
-	if ls /etc/airflow/flag/fixtures-players-DONE; than rm /etc/airflow/flag/fixtures-players-DONE exit 0
+	if ls /opt/airflow/flag/fixtures-players-DONE; then rm /opt/airflow/flag/fixtures-players-DONE exit 0
 	else exit 1 fi
 	''',
 	dag=dag
@@ -42,7 +42,7 @@ check_DONE = BashOperator(
 send_uri = BashOperator(
 	task_id='send.uri',
 	bash_command=f'''
-	python3 /etc/airflow/src/uri/make_uri_fixtures_players.py {execution_date}
+	python3 /opt/airflow/src/uri/make_uri_fixtures_players.py {execution_date}
 	''',
 	dag=dag
 )
