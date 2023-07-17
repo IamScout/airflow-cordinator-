@@ -5,14 +5,16 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 # from airflow.models.variable import Variable
 import pendulum
+import sys
+sys.path.append("/opt/airflow")
 
 # PARAMETERS
 # KST = pendulum.timezone("Asia/Seoul")
-execution_date = {{ds}}.strftime("%Y-%m-%d")
+
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
     'depends_on_past': True,
-    'start_date': datetime(2023,1,1)#, tzinfo=KST)
+    'start_date': datetime(2022,1,1)#, tzinfo=KST)
 }
 
 # DAG SETTINGS
@@ -31,37 +33,37 @@ start_task = EmptyOperator(
 # CHECK DONE
 check_DONE = BashOperator(
 	task_id='check.dir',
-	bash_command='''
+	bash_command="""
 	if ls /opt/airflow/flag/players-topscorers-DONE; then rm /opt/airflow/flag/players-topscorers-DONE exit 0
 	else exit 1 fi
-	''',
+	""",
 	dag=dag
 )
 
 # SEND URI
 send_uri = BashOperator(
 	task_id='send.uri',
-	bash_command=f'''
+	bash_command="""
 	python3 /opt/airflow/src/uri/make_uri_players_topscorers.py
-	''',
+	""",
 	dag=dag
 )
 
 # MAKE DONE FLAG
 make_DONE = BashOperator(
 	task_id='make.DONE',
-	bash_command='''
+	bash_command="""
 	touch /opt/airflow/flag/players-topscorers-DONE
-	''',
+	""",
 	dag=dag
 )
 
 # MAKE ERROR FLAG
 make_ERROR = BashOperator(
 	task_id='make.ERROR',
-	bash_command='''
+	bash_command="""
 	touch /opt/airflow/flag/players-topscorers-ERROR
-	''',
+	""",
 	dag=dag,
 	trigger_rule='one_failed'
 )
