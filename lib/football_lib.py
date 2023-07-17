@@ -39,11 +39,23 @@ def read_Params(keyword, table, external: dict = None):
         QUERY += "WHERE "
         QUERY += " AND ".join([f"{key}={value}" for key, value in external.items()])
         QUERY = QUERY.rstrip("AND")
-    # TEST
-    print(QUERY)
+    print(QUERY) # > TEST
     cursor.execute(QUERY)
     fetched = cursor.fetchall()
     return fetched
+
+# SEND AND ERASE
+def read_FIXTURES(date):
+    conn = mc.connect(user=db_data[1], \
+                      password=db_data[2], \
+                      host=db_data[0], \
+                      database='pipeline_scout', \
+                      port='3306')
+    cursor = conn.cursor()
+    QUERY = f"SELECT COUNT(api_fixture_id) FROM pipe_round WHERE date = '{date}'"
+    cursor.execute(QUERY)
+    fetched = cursor.fetchall()
+    return fetched[0]
 
 def make_uri_past(keyword, params: dict):
     base = f"https://v3.football.api-sports.io/{keyword}?"

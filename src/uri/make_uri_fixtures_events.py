@@ -1,23 +1,29 @@
+'''
+- FILE COUNT : FIXTURE (fixture_number/day)
+'''
+
+# CHANGE MAIN DIR
+import os
+os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
+# os.chdir('/etc/airflow')
+main_dir = os.getcwd()
+
 # MODULE IMPORT
 from datetime import datetime, timedelta
 import sys
-sys.path.append('../../lib')
+sys.path.append(f'{main_dir}/lib')
 import football_lib as lib
 
-# DATE parameter needs FORM : YYYY-mm-dd
-# date = (datetime.now() - timedelta(days=150)).strftime("%Y-%m-%d")
-date = sys.argv[1]
-
 # READ FIXTURE ID
+date = sys.argv[1]
 params_before = lib.read_Params("api_fixture_id", "pipe_round", {"date" : f'"{date}"'})
 
+# MAKE URI LIST
 uri_list = []
 for count in range(len(params_before)):
-    # PARAMS : fixture
     params = {
         "fixture" : params_before[count][0]
     }
-    # uri = lib.make_uri("fixtures/events", params)
     uri = lib.make_uri(params)
     uri_list.append(uri)
 
@@ -28,5 +34,5 @@ for uri in uri_list:
 # TEST
 # NEED TO FIX TABLES
 if __name__ == "__main__":
-    print(params_before)
-    print(uri_list[:5])
+    pass
+    # print(uri_list[:5])

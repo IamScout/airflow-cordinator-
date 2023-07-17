@@ -1,27 +1,32 @@
+'''
+- FILE COUNT : LEAGUE (55/day)
+'''
+
+# CHANGE MAIN DIR
+import os
+os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
+# os.chdir('/etc/airflow')
+main_dir = os.getcwd()
+
 # MODULE IMPORT
 from datetime import datetime, timedelta
 import sys
-sys.path.append('../../lib')
+sys.path.append(f'{main_dir}/lib')
 import football_lib as lib
-
-# DATE parameter needs FORM : YYYY-mm-dd
-# date = (datetime.now() - timedelta(days=100)).strftime("%Y-%m-%d")
-date = sys.argv[1]
 
 # READ LEAGUE ID
 params_before = lib.read_Params("api_league_id", "pipe_league")
 
-# URI LIST
+# MAKE URI LIST
+date = sys.argv[1]
 uri_list = []
 for count in range(len(params_before)):
-    # PARAMS : league, season, date, timezone
     params = {
         "league" : params_before[count][0],
         "season" : 2022,
         "date" : date,
         "timezone" : "Europe/London"
     }
-    # MAKE URI
     uri = lib.make_uri(params)
     uri_list.append(uri)
 
@@ -31,5 +36,5 @@ for uri in uri_list:
 
 # TEST
 if __name__ == "__main__":
-    print(params_before)
-    print(uri_list[:5])
+    pass
+    # print(uri_list[:5])
