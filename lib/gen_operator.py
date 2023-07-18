@@ -29,7 +29,6 @@ def gen_bash_curl(name: str, url : str, role:str):
 	#curl 싸개 생성기
 
 	curl_cmd = "curl link"
-
 	curl_cmd = curl_cmd.replace("link", url)
 
 	# getData 생성 func.

@@ -106,9 +106,10 @@ def make_json(uri, DIRECTORY):
     return(FILENAME + " load is done")
 
 def send_curl(uri, endpoint):
-    command = f"curl 34.64.254.93:3000/{endpoint}/url={uri}"
+    command = f"curl 34.64.254.93:3000/{endpoint}/?{uri}"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
+    print(command) ## > TEST
     if error:
         print("ERROR appeared while sending CURL:")
         print(error.decode("utf-8"))

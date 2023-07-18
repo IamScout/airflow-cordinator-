@@ -17,6 +17,7 @@ import football_lib as lib
 # READ FIXTURE ID
 date = sys.argv[1]
 params_before = lib.read_Params("api_fixture_id", "pipe_round", {"date" : f'"{date}"'})
+print(params_before)
 
 # MAKE URI LIST
 uri_list = []
@@ -26,6 +27,7 @@ for count in range(len(params_before)):
     }
     uri = lib.make_uri(params)
     uri_list.append(uri)
+    print(uri_list)
 
 # SEND CURL
 for uri in uri_list:

@@ -1,28 +1,32 @@
+# CHANGE MAIN DIR
+import os
+os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
+# os.chdir('/opt/airflow')
+main_dir = os.getcwd()
+
 from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
-# from airflow.operators.python_operator import PythonOperator
 from airflow.operators.empty import EmptyOperator
-# from airflow.models.variable import Variable
+from airflow.operators.python import BranchPythonOperator
 import pendulum
-import sys
-sys.path.append("/opt/airflow")
 
 # PARAMETERS
-#KST = pendulum.timezone("Asia/Seoul")
+date = "{{execution_date.strftime('%Y-%m-%d')}}"
 
+# ARGUMENTS
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
     'depends_on_past': True,
-    'start_date': datetime(2022,1,1)#, tzinfo=KST)
+    'start_date': datetime(2023,1,1)
 }
 
 # DAG SETTINGS
 dag = DAG('load_fixtures_data',
 		  default_args=default_args,
-		  tags=['Extract','predictions'],
+		  tags=['Extract','fixtures'],
 		  max_active_runs=1,
-		  schedule_interval='0 0 * * *')
+		  schedule_interval="@once") #'0 0 * * *')
 
 # START
 start_task = EmptyOperator(
@@ -30,63 +34,85 @@ start_task = EmptyOperator(
 	dag=dag
 )
 
-# CHECK DONE
-check_DONE = BashOperator(
-	task_id='check.dir',
-	bash_command="""
-	if ls /opt/airflow/flag/fixtures-DONE; then rm /opt/airflow/flag/fixtures-DONE exit 0
-	else exit 1 fi
-	""",
-	dag=dag
-)
-
-# check_DONE = BashOperator(
-# 	task_id='check.DONE',
-# 	bash_command=f"""
-# 	response=$(curl -s "http://34.64.254.93:3000/api/datas/json/season_23/fixtures")
-# 	if [[ $response == *"DONE"* ]]; then
-# 		exit 0;
-# 	else
-# 		exit 1;
-# 	fi
-# 	""",
-# 	dag=dag
-# )
 
 # SEND URI
+# SEND URI CURL TO API SERVER
 send_uri = BashOperator(
 	task_id='send.uri',
-	bash_command="""
-	python3 /opt/airflow/src/uri/make_uri_fixtures.py '{{execution_date.strftime('%Y-%m-%d')}}'
+	bash_command=f"""
+	python3 {main_dir}/src/uri/make_uri_fixtures.py {date}
 	""",
 	dag=dag
 )
 
-# MAKE DONE FLAG
+# MAKE DONE
+# CHECK NUMBERS OF FILES > MAKE DONE FLAG TO LOCAL DIR
 make_DONE = BashOperator(
 	task_id='make.DONE',
-	bash_command="""
-	touch /opt/airflow/flag/fixtures&'{{execution_date.strftime('%Y-%m-%d')}}'&DONE
+	bash_command=f"""
+	curl 34.64.254.93:3000/check/fixtures/?date={date}
 	""",
 	dag=dag
 )
 
-# MAKE ERROR FLAG
-make_ERROR = BashOperator(
-	task_id='make.ERROR',
-	bash_command="""
-	touch /opt/airflow/flag/fixtures&'{{execution_date.strftime('%Y-%m-%d')}}'&ERROR
-	""",
-	dag=dag,
-	trigger_rule='one_failed'
+
+def get_done_response(url):
+    import subprocess
+    command = f"curl '{url}'"
+    output = subprocess.check_output(command, shell=True).decode('utf-8').strip()
+    if output == "true":
+        return "blob.job"
+    else:
+        return "send.noti"
+
+
+# BRANCH
+branch_check_DONE = BranchPythonOperator(
+	task_id="branch.check.DONE",
+	python_callable=get_done_response,
+	provide_context=True,
+	op_kwargs={"url":"34.64.254.93:3000/done-flag/?target_dir=/api/app/datas/json/season_22/fixtures/"},
+	dag=dag
+)
+
+
+# CHECK DONE FLAG
+blob_job = BashOperator(
+    task_id='blob.job',
+    bash_command=f'''
+	curl 34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures
+	''',
+    dag=dag
+)
+
+# DELETE
+clensing_data = BashOperator(
+    task_id='clensing.data',
+    bash_command='''
+	curl 34.64.254.93:3000/delete/fixtures/
+	''',
+    dag=dag
+)
+
+# SEND NOTI
+# SEND NOTIFICATION
+send_noti = BashOperator(
+    task_id='send.noti',
+    bash_command='''
+    curl -X POST -H 'Authorization: Bearer fxANtArqOzDWxjissz34JryOGhwONGhC1uMN8qc59Z3'
+                 -F 'Something is wrong with today's fixtures data' https://notify-api.line.me/api/notify
+    ''',
+    dag=dag
 )
 
 # FINISH TASK
 finish_task = EmptyOperator(
 	task_id = 'finish.task',
-	dag = dag
+	dag = dag,
+    trigger_rule='all_done'
 )
 
 # OPERATOR PROCEDURE
-start_task >> check_DONE >> send_uri >> [make_DONE, make_ERROR]
-make_DONE >> finish_task
+start_task >> send_uri >> make_DONE >> branch_check_DONE >> [blob_job, send_noti] 
+blob_job >> clensing_data >> finish_task
+send_noti >> finish_task
