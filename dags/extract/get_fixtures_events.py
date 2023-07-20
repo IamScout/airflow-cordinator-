@@ -50,9 +50,9 @@ def get_done_response(url):
     command = f"curl '{url}'"
     output = subprocess.check_output(command, shell=True).decode('utf-8').strip()
     if output == "true":
-        return "blob.job"
+        return "blob_data_DL"
     else:
-        return "send.noti"
+        return "send_notification"
 
 branch_check_DONE = BranchPythonOperator(
 	task_id="branch_check_flag",
