@@ -1,7 +1,7 @@
 # CHANGE MAIN DIR
 import os
-os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
-# os.chdir('/opt/airflow')
+# os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
+os.chdir('/opt/airflow')
 main_dir = os.getcwd()
 
 from airflow import DAG
@@ -18,7 +18,7 @@ date = "{{execution_date.strftime('%Y-%m-%d')}}"
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
     'depends_on_past': True,
-    'start_date': datetime(2023,1,1)
+    'start_date': datetime(2022,1,20)
 }
 
 # DAG SETTINGS
