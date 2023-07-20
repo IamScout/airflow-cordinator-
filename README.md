@@ -6,7 +6,8 @@
  2. 당일 갱신되는 데이터들을 요청하기 위한 url 일별 생성
  3. 주간 갱신되는 데이터들을 요청하기 위한 url 주별 생성
  4. 생성된 url을 FAST API 서버로 curl
- 
+
+
 ## Tools
  1. Apache Airflow - v2.6.1
  2. Google Cloud Service : MySQL 
