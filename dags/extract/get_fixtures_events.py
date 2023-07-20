@@ -1,21 +1,19 @@
-import os
-
-os.chdir('/opt/airflow')
+import os, pendulum
 main_dir = os.getcwd()
-
 from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
-import pendulum
+
+os.chdir('/opt/airflow')
 
 date = "{{execution_date.strftime('%Y-%m-%d')}}"
 
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
     'depends_on_past': True,
-    'start_date': datetime(2023,1,1)
+    'start_date': datetime(2022,1,20)
 }
 
 # DAG SETTINGS
