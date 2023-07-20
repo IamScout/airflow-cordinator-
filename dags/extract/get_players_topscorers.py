@@ -4,11 +4,9 @@ os.chdir('/opt/airflow')
 main_dir = os.getcwd()
 
 from airflow import DAG
-from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
-import pendulum
 
 
 # PARAMETERS
@@ -34,7 +32,6 @@ start_task = EmptyOperator(
 	dag=dag
 )
 
-# SEND URI
 # SEND URI CURL TO API SERVER
 send_uri = BashOperator(
 	task_id='send.uri',
@@ -54,7 +51,7 @@ make_DONE = BashOperator(
 	dag=dag
 )
 
-
+# Defining Branching Function
 def get_done_response(url):
     import subprocess
     command = f"curl '{url}'"
@@ -93,7 +90,6 @@ clensing_data = BashOperator(
     dag=dag
 )
 
-# SEND NOTI
 # SEND NOTIFICATION
 send_noti = BashOperator(
     task_id='send.noti',

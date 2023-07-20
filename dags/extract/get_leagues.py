@@ -4,11 +4,9 @@ os.chdir('/opt/airflow')
 main_dir = os.getcwd()
 
 from airflow import DAG
-from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
-import pendulum
 
 
 # PARAMETERS
@@ -34,7 +32,6 @@ start_task = EmptyOperator(
 	dag=dag
 )
 
-# SEND URI
 # SEND URI CURL TO API SERVER
 send_uri = BashOperator(
 	task_id='send.uri',
@@ -54,7 +51,7 @@ make_DONE = BashOperator(
 	dag=dag
 )
 
-
+# Defining Branching Function
 def get_done_response(url):
     import subprocess
     command = f"curl '{url}'"
@@ -64,7 +61,6 @@ def get_done_response(url):
     else:
         return "send.noti"
 
-
 # BRANCH
 branch_check_DONE = BranchPythonOperator(
 	task_id="branch.check.DONE",
@@ -73,7 +69,6 @@ branch_check_DONE = BranchPythonOperator(
 	op_kwargs={"url":"34.64.254.93:3000/done-flag/?target_dir=/api/app/datas/json/season_22/leagues/"},
 	dag=dag
 )
-
 
 # CHECK DONE FLAG
 blob_job = BashOperator(
@@ -93,7 +88,6 @@ clensing_data = BashOperator(
     dag=dag
 )
 
-# SEND NOTI
 # SEND NOTIFICATION
 send_noti = BashOperator(
     task_id='send.noti',
