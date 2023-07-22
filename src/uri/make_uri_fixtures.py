@@ -17,8 +17,7 @@ import football_lib as lib
 params_before = lib.read_Params("api_league_id", "pipe_league")
 
 # MAKE URI LIST
-# date = sys.argv[1]
-date = "2022-01-20"
+date = sys.argv[1]
 uri_list = []
 for count in range(len(params_before)):
     params = {
