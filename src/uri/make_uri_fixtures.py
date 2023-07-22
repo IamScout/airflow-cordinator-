@@ -7,7 +7,6 @@ import os
 # os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
-
 # MODULE IMPORT
 from datetime import datetime, timedelta
 import sys
@@ -18,7 +17,8 @@ import football_lib as lib
 params_before = lib.read_Params("api_league_id", "pipe_league")
 
 # MAKE URI LIST
-date = sys.argv[1]
+# date = sys.argv[1]
+date = "2022-01-20"
 uri_list = []
 for count in range(len(params_before)):
     params = {
@@ -36,5 +36,5 @@ for uri in uri_list:
 
 # TEST
 if __name__ == "__main__":
-    pass
-    # print(uri_list[:5])
+    # pass
+    print(uri_list[:5])

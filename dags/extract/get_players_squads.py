@@ -39,7 +39,7 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='check_flag_data',
 	bash_command=f"""
-	curl 34.64.254.93:3000/check/players_squads/?cnt=895
+	curl '34.64.254.93:3000/check/players_squads/?cnt=895'
 	""",
 	dag=dag
 )
@@ -66,7 +66,7 @@ branch_check_DONE = BranchPythonOperator(
 blob_job = BashOperator(
     task_id='blob_players_squads_data_DL',
     bash_command=f'''
-	curl 34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/players_squads
+	curl "34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/players_squads"
 	''',
     dag=dag
 )
@@ -75,7 +75,7 @@ blob_job = BashOperator(
 clensing_data = BashOperator(
     task_id='clensing_players_data',
     bash_command='''
-	curl 34.64.254.93:3000/delete/players-squads/
+	curl "34.64.254.93:3000/delete/players-squads/"
 	''',
     dag=dag
 )

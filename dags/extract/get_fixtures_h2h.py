@@ -37,7 +37,7 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='drop_flag',
 	bash_command=f"""
-	curl 34.64.254.93:3000/check/fixtures-headtohead/?date={date}
+	curl '34.64.254.93:3000/check/fixtures-headtohead/?date={date}'
 	""",
 	dag=dag
 )
@@ -62,7 +62,7 @@ branch_check_DONE = BranchPythonOperator(
 blob_job = BashOperator(
     task_id='blob_data_DL',
     bash_command=f'''
-	curl 34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_headtohead
+	curl '34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_headtohead'
 	''',
     dag=dag
 )
@@ -70,7 +70,7 @@ blob_job = BashOperator(
 clensing_data = BashOperator(
     task_id='clensing_fixtures_events',
     bash_command='''
-	curl 34.64.254.93:3000/delete/fixtures-headtohead/
+	curl '34.64.254.93:3000/delete/fixtures-headtohead/'
 	''',
     dag=dag
 )

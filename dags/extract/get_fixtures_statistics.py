@@ -50,7 +50,7 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='make.DONE',
 	bash_command=f"""
-	curl 34.64.254.93:3000/check/fixtures-statistics/?date={date}
+	'curl 34.64.254.93:3000/check/fixtures-statistics/?date={date}'
 	""",
 	dag=dag
 )
@@ -80,7 +80,7 @@ branch_check_DONE = BranchPythonOperator(
 blob_job = BashOperator(
     task_id='blob.job',
     bash_command=f'''
-	curl 34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_statistics
+	"curl 34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_statistics"
 	''',
     dag=dag
 )
@@ -89,7 +89,7 @@ blob_job = BashOperator(
 clensing_data = BashOperator(
     task_id='clensing.data',
     bash_command='''
-	curl 34.64.254.93:3000/delete/fixtures-statistics/
+	"curl 34.64.254.93:3000/delete/fixtures-statistics/"
 	''',
     dag=dag
 )

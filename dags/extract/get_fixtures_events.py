@@ -7,7 +7,6 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
 
-
 date = "{{execution_date.strftime('%Y-%m-%d')}}"
 
 default_args = {
@@ -39,11 +38,10 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='drop_flag',
 	bash_command=f"""
-	curl 34.64.254.93:3000/check/fixtures-events/?date={date}
+	curl '34.64.254.93:3000/check/fixtures-events/?cnt=55'
 	""",
 	dag=dag
 )
-
 
 def get_done_response(url):
     import subprocess
@@ -62,12 +60,11 @@ branch_check_DONE = BranchPythonOperator(
 	dag=dag
 )
 
-
 # CHECK DONE FLAG
 blob_job = BashOperator(
     task_id='blob_data_DL',
     bash_command=f'''
-	curl 34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_events
+	curl '34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_events'
 	''',
     dag=dag
 )
@@ -76,7 +73,7 @@ blob_job = BashOperator(
 clensing_data = BashOperator(
     task_id='clensing_fixtures_events',
     bash_command='''
-	curl 34.64.254.93:3000/delete/fixtures-events/
+	curl '34.64.254.93:3000/delete/fixtures-events/'
 	''',
     dag=dag
 )
