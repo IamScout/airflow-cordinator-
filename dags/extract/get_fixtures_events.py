@@ -1,18 +1,14 @@
-# CHANGE MAIN DIR
-import os
+import os, pendulum
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
-
 from airflow import DAG
+from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
 
-
-# PARAMETERS
 date = "{{execution_date.strftime('%Y-%m-%d')}}"
 
-# ARGUMENTS
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
     'depends_on_past': True,
@@ -20,77 +16,72 @@ default_args = {
 }
 
 # DAG SETTINGS
-dag = DAG('load_leagues_data',
+dag = DAG('load_fixtures_events_data',
 		  default_args=default_args,
-		  tags=['Extract','leagues'],
+		  tags=['Extract','fixtures-events', 'fixtures_id'],
 		  max_active_runs=1,
 		  schedule_interval='0 0 * * *')
 
-# START
 start_task = EmptyOperator(
-	task_id = 'start.task',
+	task_id = 'start_task',
 	dag=dag
 )
 
-# SEND URI CURL TO API SERVER
 send_uri = BashOperator(
-	task_id='send.uri',
+	task_id='get_data_fixtures_events',
 	bash_command=f"""
-	python3 {main_dir}/src/uri/make_uri_leagues.py
+	python3 {main_dir}/src/uri/make_uri_fixtures_events.py {date}
 	""",
 	dag=dag
 )
 
-# MAKE DONE
-# CHECK NUMBERS OF FILES > MAKE DONE FLAG TO LOCAL DIR
 make_DONE = BashOperator(
-	task_id='make.DONE',
+	task_id='drop_flag',
 	bash_command=f"""
-	curl '34.64.254.93:3000/check/leagues/?cnt=55'
+	curl '34.64.254.93:3000/check/fixtures-events/?cnt=55'
 	""",
 	dag=dag
 )
 
-# Defining Branching Function
 def get_done_response(url):
     import subprocess
     command = f"curl '{url}'"
     output = subprocess.check_output(command, shell=True).decode('utf-8').strip()
     if output == "true":
-        return "blob.job"
+        return "blob_data_DL"
     else:
-        return "send.noti"
+        return "send_notification"
 
-# BRANCH
 branch_check_DONE = BranchPythonOperator(
-	task_id="branch.check.DONE",
+	task_id="branch_check_flag",
 	python_callable=get_done_response,
 	provide_context=True,
-	op_kwargs={"url":"34.64.254.93:3000/done-flag/?target_dir=/api/app/datas/json/season_22/leagues/"},
+	op_kwargs={"url":"34.64.254.93:3000/done-flag/?target_dir=/api/app/datas/json/season_22/fixtures_events/"},
 	dag=dag
 )
 
 # CHECK DONE FLAG
 blob_job = BashOperator(
-    task_id='blob.job',
+    task_id='blob_data_DL',
     bash_command=f'''
-	curl "34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/leagues"
+	curl '34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_events'
 	''',
     dag=dag
 )
 
 # DELETE
 clensing_data = BashOperator(
-    task_id='clensing.data',
+    task_id='clensing_fixtures_events',
     bash_command='''
-	curl "34.64.254.93:3000/delete/leagues/"
+	curl '34.64.254.93:3000/delete/fixtures-events/'
 	''',
     dag=dag
 )
 
+# SEND NOTI
 # SEND NOTIFICATION
 send_noti = BashOperator(
-    task_id='send.noti',
+    task_id='send_notification',
     bash_command='''
     curl -X POST -H 'Authorization: Bearer fxANtArqOzDWxjissz34JryOGhwONGhC1uMN8qc59Z3'
                  -F 'Something is wrong with today's fixtures/events data' https://notify-api.line.me/api/notify
@@ -100,7 +91,7 @@ send_noti = BashOperator(
 
 # FINISH TASK
 finish_task = EmptyOperator(
-	task_id = 'finish.task',
+	task_id = 'finish_task',
 	dag = dag,
     trigger_rule='all_done'
 )

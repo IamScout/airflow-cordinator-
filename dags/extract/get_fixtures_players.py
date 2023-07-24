@@ -1,13 +1,15 @@
 # CHANGE MAIN DIR
 import os
+# os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
 
 from airflow import DAG
+from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
-
+import pendulum
 
 # PARAMETERS
 date = "{{execution_date.strftime('%Y-%m-%d')}}"
@@ -20,9 +22,9 @@ default_args = {
 }
 
 # DAG SETTINGS
-dag = DAG('load_leagues_data',
+dag = DAG('load_fixtures_players_data',
 		  default_args=default_args,
-		  tags=['Extract','leagues'],
+		  tags=['Extract','fixtures-players'],
 		  max_active_runs=1,
 		  schedule_interval='0 0 * * *')
 
@@ -32,11 +34,12 @@ start_task = EmptyOperator(
 	dag=dag
 )
 
+# SEND URI
 # SEND URI CURL TO API SERVER
 send_uri = BashOperator(
 	task_id='send.uri',
 	bash_command=f"""
-	python3 {main_dir}/src/uri/make_uri_leagues.py
+	python3 {main_dir}/src/uri/make_uri_fixtures_players.py {date}
 	""",
 	dag=dag
 )
@@ -46,12 +49,12 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='make.DONE',
 	bash_command=f"""
-	curl '34.64.254.93:3000/check/leagues/?cnt=55'
+	curl '34.64.254.93:3000/check/fixtures-players/?date={date}'
 	""",
 	dag=dag
 )
 
-# Defining Branching Function
+
 def get_done_response(url):
     import subprocess
     command = f"curl '{url}'"
@@ -61,20 +64,22 @@ def get_done_response(url):
     else:
         return "send.noti"
 
+
 # BRANCH
 branch_check_DONE = BranchPythonOperator(
 	task_id="branch.check.DONE",
 	python_callable=get_done_response,
 	provide_context=True,
-	op_kwargs={"url":"34.64.254.93:3000/done-flag/?target_dir=/api/app/datas/json/season_22/leagues/"},
+	op_kwargs={"url":"34.64.254.93:3000/done-flag/?target_dir=/api/app/datas/json/season_22/fixtures_players/"},
 	dag=dag
 )
+
 
 # CHECK DONE FLAG
 blob_job = BashOperator(
     task_id='blob.job',
     bash_command=f'''
-	curl "34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/leagues"
+	curl "34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/fixtures_players"
 	''',
     dag=dag
 )
@@ -83,17 +88,18 @@ blob_job = BashOperator(
 clensing_data = BashOperator(
     task_id='clensing.data',
     bash_command='''
-	curl "34.64.254.93:3000/delete/leagues/"
+	curl "34.64.254.93:3000/delete/fixtures-players/"
 	''',
     dag=dag
 )
 
+# SEND NOTI
 # SEND NOTIFICATION
 send_noti = BashOperator(
     task_id='send.noti',
     bash_command='''
     curl -X POST -H 'Authorization: Bearer fxANtArqOzDWxjissz34JryOGhwONGhC1uMN8qc59Z3'
-                 -F 'Something is wrong with today's fixtures/events data' https://notify-api.line.me/api/notify
+                 -F 'Something is wrong with today's fixtures/players data' https://notify-api.line.me/api/notify
     ''',
     dag=dag
 )

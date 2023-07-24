@@ -1,12 +1,15 @@
 from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import BranchPythonOperator
 from airflow.operators.empty import EmptyOperator
 import pendulum, os
 
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
+
+# PARAMETERS
+date = "{{execution_date.strftime('%Y-%m-%d')}}"
 
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
@@ -66,7 +69,7 @@ branch_check_DONE = BranchPythonOperator(
 blob_job = BashOperator(
     task_id='blob_players_data_DL',
     bash_command=f'''
-	curl 34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/players
+	curl "34.64.254.93:3000/blob-data/?target_dir=/api/app/datas/json/season_22/players"
 	''',
     dag=dag
 )
@@ -75,7 +78,7 @@ blob_job = BashOperator(
 clensing_data = BashOperator(
     task_id='clensing_players_data',
     bash_command='''
-	curl 34.64.254.93:3000/delete/players/
+	curl "34.64.254.93:3000/delete/players/"
 	''',
     dag=dag
 )
