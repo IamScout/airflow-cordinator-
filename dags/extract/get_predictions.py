@@ -49,7 +49,7 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='make.DONE',
 	bash_command=f"""
-	curl '34.64.254.93:3000/check/predictions/?cnt=55'
+	curl '34.64.254.93:3000/check/predictions/?date={date}'
 	""",
 	dag=dag
 )
