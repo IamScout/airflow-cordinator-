@@ -1,9 +1,13 @@
+# CHANGE MAIN DIR
+import os
+os.chdir('/opt/airflow')
+main_dir = os.getcwd()
+
 from airflow import DAG
-from datetime import datetime, timedelta
+from datetime import datetime
 from airflow.operators.bash import BashOperator
 from airflow.operators.python_operator import BranchPythonOperator
 from airflow.operators.empty import EmptyOperator
-import pendulum, os
 
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()

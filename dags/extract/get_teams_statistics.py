@@ -1,15 +1,13 @@
 # CHANGE MAIN DIR
 import os
-# os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
 
 from airflow import DAG
-from datetime import datetime, timedelta
+from datetime import datetime
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
-import pendulum
 
 # PARAMETERS
 date = "{{execution_date.strftime('%Y-%m-%d')}}"
@@ -22,7 +20,7 @@ default_args = {
 }
 
 # DAG SETTINGS
-dag = DAG('load_teams_data',
+dag = DAG('load_teams_statistics_data',
 		  default_args=default_args,
 		  tags=['Extract','teams-statistics'],
 		  max_active_runs=1,

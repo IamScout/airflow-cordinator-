@@ -1,11 +1,14 @@
+# CHANGE MAIN DIR
+import os
+os.chdir('/opt/airflow')
+main_dir = os.getcwd()
+
 from airflow import DAG
-from datetime import datetime, timedelta
+from datetime import datetime
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
-import os, pendulum
-os.chdir('/opt/airflow')
-main_dir = os.getcwd()
+
 date = "{{execution_date.strftime('%Y-%m-%d')}}"
 
 default_args = {
