@@ -1,6 +1,5 @@
 # CHANGE MAIN DIR
 import os
-# os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
 

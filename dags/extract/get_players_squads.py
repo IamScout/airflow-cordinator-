@@ -1,13 +1,13 @@
-from airflow import DAG
-from datetime import datetime, timedelta
-from airflow.operators.bash import BashOperator
-from airflow.operators.python_operator import PythonOperator
-from airflow.operators.empty import EmptyOperator
-from airflow.operators.python import BranchPythonOperator
-import pendulum, os
-
+# CHANGE MAIN DIR
+import os
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
+
+from airflow import DAG
+from datetime import datetime
+from airflow.operators.bash import BashOperator
+from airflow.operators.python_operator import BranchPythonOperator
+from airflow.operators.empty import EmptyOperator
 
 default_args = {
     'owner': 'i_am_scouter:v1.0.0',
@@ -20,7 +20,7 @@ dag = DAG('load_players_squad_data',
 		  default_args=default_args,
 		  tags=['Extract','players_squads'],
 		  max_active_runs=1,
-		  schedule_interval='0 1 * * *')
+		  schedule_interval='0 0 * * *')
 
 # START
 start_task = EmptyOperator(
@@ -40,7 +40,7 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='check_flag_data',
 	bash_command=f"""
-	curl 34.64.254.93:3000/check/players-squads/?cnt=895
+	curl '34.64.254.93:3000/check/players_squads/?cnt=895'
 	""",
 	dag=dag
 )

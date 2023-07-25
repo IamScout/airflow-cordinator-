@@ -1,8 +1,10 @@
-import os, pendulum
+# CHANGE MAIN DIR
+import os
 os.chdir('/opt/airflow')
 main_dir = os.getcwd()
+
 from airflow import DAG
-from datetime import datetime, timedelta
+from datetime import datetime
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
@@ -38,7 +40,7 @@ send_uri = BashOperator(
 make_DONE = BashOperator(
 	task_id='drop_flag',
 	bash_command=f"""
-	curl '34.64.254.93:3000/check/fixtures-events/?cnt=55'
+	curl '34.64.254.93:3000/check/fixtures-events/?date={date}'
 	""",
 	dag=dag
 )
