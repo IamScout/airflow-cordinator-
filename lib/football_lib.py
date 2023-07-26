@@ -1,25 +1,35 @@
 import mysql.connector as mc
 import requests, json, csv, subprocess
+from airflow.models.variable import Variable
 
-# CSV File Located At Local
-PATH_DB = '/Users/kimdohoon/src/google/scout_sql.csv'
-with open(PATH_DB, 'r') as file:
-    csv_reader = csv.reader(file)
-    for row in csv_reader:
-        db_data = row
+# # CSV File Located At Local
+# PATH_DB = '/Users/kimdohoon/src/google/scout_sql.csv'
+# with open(PATH_DB, 'r') as file:
+#     csv_reader = csv.reader(file)
+#     for row in csv_reader:
+#         db_data = row
 
-PATH_API = '/Users/kimdohoon/src/API/football.csv'
-with open(PATH_API, 'r') as file:
-    csv_reader = csv.reader(file)
-    for row in csv_reader:
-        api_data = row
+# PATH_API = '/Users/kimdohoon/src/API/football.csv'
+# with open(PATH_API, 'r') as file:
+#     csv_reader = csv.reader(file)
+#     for row in csv_reader:
+#         api_data = row
+
+# def MySQL_Connection():
+#     conn = mc.connect(user=db_data[1], \
+#                       password=db_data[2], \
+# 	                  host=db_data[0], \
+# 	                  database = 'pipeline_scout', \
+# 	                  port = '3306')
+#     print("Hi! SQL")
+#     return conn
 
 def MySQL_Connection():
-    conn = mc.connect(user=db_data[1], \
-                      password=db_data[2], \
-	                  host=db_data[0], \
-	                  database = 'pipeline_scout', \
-	                  port = '3306')
+    conn = mc.connect(user="root", \
+                      password=Variable.get("db_pw"), \
+	                  host=Variable.get("db_host"), \
+	                  database=Variable.get("db_name"), \
+	                  port=Variable.get("db_port"))
     print("Hi! SQL")
     return conn
 
@@ -44,18 +54,33 @@ def read_Params(keyword, table, external: dict = None):
     fetched = cursor.fetchall()
     return fetched
 
+# # SEND AND ERASE
+# def read_FIXTURES(date):
+#     conn = mc.connect(user=db_data[1], \
+#                       password=db_data[2], \
+#                       host=db_data[0], \
+#                       database='pipeline_scout', \
+#                       port='3306')
+#     cursor = conn.cursor()
+#     QUERY = f"SELECT COUNT(api_fixture_id) FROM pipe_round WHERE date = '{date}'"
+#     cursor.execute(QUERY)
+#     fetched = cursor.fetchall()
+#     return fetched[0]
+
+
 # SEND AND ERASE
 def read_FIXTURES(date):
-    conn = mc.connect(user=db_data[1], \
-                      password=db_data[2], \
-                      host=db_data[0], \
-                      database='pipeline_scout', \
-                      port='3306')
+    conn = mc.connect(user="root", \
+                      password=Variable.get("db_pw"), \
+	                  host=Variable.get("db_host"), \
+	                  database=Variable.get("db_name"), \
+	                  port=Variable.get("db_port"))
     cursor = conn.cursor()
     QUERY = f"SELECT COUNT(api_fixture_id) FROM pipe_round WHERE date = '{date}'"
     cursor.execute(QUERY)
     fetched = cursor.fetchall()
     return fetched[0]
+
 
 def make_uri_past(keyword, params: dict):
     base = f"https://v3.football.api-sports.io/{keyword}?"
@@ -106,7 +131,7 @@ def make_json(uri, DIRECTORY):
     return(FILENAME + " load is done")
 
 def send_curl(uri, endpoint):
-    command = f"curl 34.64.254.93:3000/{endpoint}/?{uri}"
+    command = f"curl '34.64.254.93:3000/{endpoint}/?{uri}'"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
     print(command) ## > TEST

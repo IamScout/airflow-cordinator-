@@ -4,10 +4,9 @@
 
 # CHANGE MAIN DIR
 import os
-os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
-# os.chdir('/etc/airflow')
+# os.chdir('/Users/kimdohoon/git/IamScout/airflow-cordinator-')
+os.chdir('/opt/airflow')
 main_dir = os.getcwd()
-
 # MODULE IMPORT
 from datetime import datetime, timedelta
 import sys
@@ -36,5 +35,5 @@ for uri in uri_list:
 
 # TEST
 if __name__ == "__main__":
-    pass
-    # print(uri_list[:5])
+    # pass
+    print(uri_list[:5])
